@@ -1,7 +1,8 @@
 
 class Weapon {
-    constructor(dmg) {
+    constructor(dmg, type) {
         this.dmg = dmg
+        this.type = type
     }
 }
 
@@ -28,9 +29,17 @@ class Player {
         
         if (this.weapon) {
             doDmg = doDmg + this.weapon.dmg
+            if (this.weapon.type === "axe") {
+                doDmg = doDmg * 2
+            }
         }
 
         this.target.takeDamage(doDmg)
+    }
+
+    heal() {
+        this.hp = 100
+        this.render()
     }
 
     takeDamage(dmg) {
@@ -51,12 +60,10 @@ class Player {
     }
 }
 
-const axe = new Weapon(12)
-
 const p1 = new Player("#player", "Cedric", 200)
+p1.weapon = new Weapon(5, "axe")
+
 const enemy = new Player("#enemy", "Gegner", 50)
 
 p1.target = enemy
 enemy.target = p1
-
-p1.weapon = axe
