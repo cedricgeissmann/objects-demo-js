@@ -14,18 +14,20 @@ class Player {
         this.id = id
         this.name = name
 
-        this.hp = baseHp + 20
-        this.armor = 8
-        this.dmg = 4
+        this.statsHp = baseHp + 20
+        this.statsArmor = 8
+        this.statsDmg = 4
+        this.statsMana = 100
         
         this.target = null
         
         this.render()
     }
 
-    attack() {
+    actionAttack() {
+        errorLog("Attack!!!")
 
-        let doDmg = this.dmg
+        let doDmg = this.statsDmg
         
         if (this.weapon) {
             doDmg = doDmg + this.weapon.dmg
@@ -37,20 +39,35 @@ class Player {
         this.target.takeDamage(doDmg)
     }
 
-    heal() {
-        this.hp = 100
+    actionHeal() {
+        if (this.statsMana >= 33) {
+            this.statsHp = 100
+            this.statsMana = this.statsMana - 33
+        }
+        this.render()
+    }
+
+    actionBlock() {
+        this.statsArmor = this.statsArmor * 2
+        this.blocking = true
         this.render()
     }
 
     takeDamage(dmg) {
 
         let takeDmg = dmg
-        takeDmg = takeDmg - this.armor
+        takeDmg = takeDmg - this.statsArmor
         if (takeDmg < 1) {
             takeDmg = 1
         }
 
-        this.hp = this.hp - takeDmg
+        this.statsHp = this.statsHp - takeDmg
+
+        if (this.blocking) {
+            this.blocking = false
+            this.statsArmor = this.statsArmor / 2
+        }
+
         this.render()
     }
 
