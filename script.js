@@ -1,10 +1,20 @@
+
+class Weapon {
+    constructor(dmg) {
+        this.dmg = dmg
+    }
+}
+
+
+
+
 class Player {
-    constructor(id, name) {
+    constructor(id, name, baseHp) {
         this.id = id
         this.name = name
 
-        this.hp = 100
-        this.armor = 2
+        this.hp = baseHp + 20
+        this.armor = 8
         this.dmg = 4
         
         this.target = null
@@ -13,11 +23,25 @@ class Player {
     }
 
     attack() {
-        this.target.takeDamage(this.dmg)
+
+        let doDmg = this.dmg
+        
+        if (this.weapon) {
+            doDmg = doDmg + this.weapon.dmg
+        }
+
+        this.target.takeDamage(doDmg)
     }
 
     takeDamage(dmg) {
-        this.hp = this.hp - dmg
+
+        let takeDmg = dmg
+        takeDmg = takeDmg - this.armor
+        if (takeDmg < 1) {
+            takeDmg = 1
+        }
+
+        this.hp = this.hp - takeDmg
         this.render()
     }
 
@@ -27,12 +51,12 @@ class Player {
     }
 }
 
+const axe = new Weapon(12)
 
+const p1 = new Player("#player", "Cedric", 200)
+const enemy = new Player("#enemy", "Gegner", 50)
 
-
-
-
-
-const p1 = new Player("#player", "Spieler")
-const enemy = new Player("#enemy", "Gegner")
 p1.target = enemy
+enemy.target = p1
+
+p1.weapon = axe
