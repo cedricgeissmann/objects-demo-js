@@ -8,9 +8,11 @@ body {
 }
 
 #player-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-columns: auto auto;
+    column-gap: 20px;
+    row-gap: 30px;
     font-size: 24pt;
 }
 
@@ -22,7 +24,7 @@ body {
     justify-content: center;
     background-color: lightgrey;
     padding: 20px;
-    width: 40%;
+    width: 100%;
 }
 
 .player p {
@@ -30,16 +32,19 @@ body {
     padding: 0;
 }
 
-#player h2 {
+#player-container > .player h2 {
     color: forestgreen;
 }
 
-#enemy h2 {
+#player-container > .player ~ .player h2 {
     color: firebrick;
 }
 
 button {
     font-size: inherit;
+    min-width: 200px;
+    min-height: 60px;
+    border-radius: 8px;
 }
 
 #err-msg {

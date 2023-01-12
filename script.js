@@ -1,14 +1,3 @@
-
-class Weapon {
-    constructor(dmg, type) {
-        this.dmg = dmg
-        this.type = type
-    }
-}
-
-
-
-
 class Player {
     constructor(name, hp) {
         this.name = name
@@ -24,53 +13,25 @@ class Player {
     }
 
     actionAttack() {
-        errorLog("Attack!!!")
-
-        let doDmg = this.statsDmg
-        
-        if (this.weapon) {
-            doDmg = doDmg + this.weapon.dmg
-            if (this.weapon.type === "axe") {
-                doDmg = doDmg * 2
-            }
+        if (this.target == null) {
+            errorLog("Es ist kein Ziel definiert.")
         }
-
+        let doDmg = this.statsDmg
         this.target.takeDamage(doDmg)
     }
 
-    actionHeal() {
-        if (this.statsMana >= 33) {
-            this.statsHp = 100
-            this.statsMana = this.statsMana - 33
-        }
-    }
-
-    actionBlock() {
-        this.statsArmor = this.statsArmor * 2
-        this.blocking = true
-    }
-
     takeDamage(dmg) {
-
         let takeDmg = dmg
-        takeDmg = takeDmg - this.statsArmor
-        if (takeDmg < 1) {
-            takeDmg = 1
-        }
-
         this.statsHp = this.statsHp - takeDmg
-
-        if (this.blocking) {
-            this.blocking = false
-            this.statsArmor = this.statsArmor / 2
-        }
     }
 }
 
-const p1 = new Player("Cedric", 200)
-p1.weapon = new Weapon(5, "axe")
 
+
+
+
+const p1 = new Player("Cedric", 200)
 const enemy = new Player("Gegner", 50)
 
 p1.target = enemy
-enemy.target = p1
+
