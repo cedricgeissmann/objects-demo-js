@@ -10,18 +10,17 @@ class Weapon {
 
 
 class Player {
-    constructor(id, name, baseHp) {
-        this.id = id
+    constructor(name, hp) {
         this.name = name
 
-        this.statsHp = baseHp + 20
+        this.statsHp = 20 + hp
         this.statsArmor = 8
         this.statsDmg = 4
         this.statsMana = 100
         
         this.target = null
         
-        this.render()
+        watchElement(this)
     }
 
     actionAttack() {
@@ -44,13 +43,11 @@ class Player {
             this.statsHp = 100
             this.statsMana = this.statsMana - 33
         }
-        this.render()
     }
 
     actionBlock() {
         this.statsArmor = this.statsArmor * 2
         this.blocking = true
-        this.render()
     }
 
     takeDamage(dmg) {
@@ -67,20 +64,13 @@ class Player {
             this.blocking = false
             this.statsArmor = this.statsArmor / 2
         }
-
-        this.render()
-    }
-
-    // Zeigt das Objekt im HTML an, wird auch gebraucht wenn ein Wert ändert.
-    render() {
-        renderPlayer(this)
     }
 }
 
-const p1 = new Player("#player", "Cedric", 200)
+const p1 = new Player("Cedric", 200)
 p1.weapon = new Weapon(5, "axe")
 
-const enemy = new Player("#enemy", "Gegner", 50)
+const enemy = new Player("Gegner", 50)
 
 p1.target = enemy
 enemy.target = p1

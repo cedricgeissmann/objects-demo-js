@@ -1,14 +1,55 @@
+const elementsToRender = new Set()
+
+function watchElement(obj) {
+  if (!elementsToRender.has(obj)) {
+    elementsToRender.add(obj)
+  }
+  console.log(elementsToRender)
+  renderAllElements()
+}
+
+function renderAllElements() {
+  elementsToRender.forEach((elem) => renderPlayer(elem))
+}
+
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1)
+}
+
+function checkPlayerContainer() {
+    let container = document.querySelector("#player-container")
+    if (container == null) {
+        container = document.createElement("div")
+        container.setAttribute("id", "player-container")
+        document.body.appendChild(container)
+    }
+    return container
+}
+
+
 function renderPlayer(obj) {
 
-  function capitalize(str) {
-    return str[0].toUpperCase() + str.slice(1)
+  const playerContainer = checkPlayerContainer()
+
+  let playerElement = null
+  console.log(obj.id)
+  if (obj.id) {
+    playerElement = document.getElementById(obj.id)
+  } else {
+    console.log("create element")
+    let id = `player-${playerContainer.childElementCount}`
+    obj.id = id
+    playerElement = document.createElement("div")
+    playerElement.setAttribute("id", id)
+    playerElement.classList.add("player")
+    playerContainer.appendChild(playerElement)
   }
 
-  const playerElement = document.querySelector(obj.id);
-  let actions = [];
-  let buttons = [];
+
+  let actions = []
+  let buttons = []
   Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach((prop) => {
-    if ( typeof obj[prop] === 'function' && prop.startsWith("action")) {
+    if (typeof obj[prop] === "function" && prop.startsWith("action")) {
       let name = prop.toString().substring("action".length).toLowerCase()
       actions.push(name)
       buttons = buttons + `<button class="${name}">${capitalize(name)}</button>`
@@ -22,31 +63,36 @@ function renderPlayer(obj) {
       stats = stats + `<p>${name}: ${obj[prop]}</p>`
     }
   })
-  
+
+  console.log(playerElement)
   playerElement.innerHTML = `
         <h2>${obj.name}</h2>
         ${stats}
-        ${buttons}`;
+        ${buttons}`
 
   actions.forEach((a) => {
-    playerElement
-    .querySelector(`.${a}`)
-    .addEventListener("click", () => {
+    playerElement.querySelector(`.${a}`).addEventListener("click", () => {
       obj[`action${capitalize(a)}`]()
-    });
+      renderAllElements()
+    })
   })
 }
 
 let errorTimeout = null
 
 function errorLog(msg) {
-  const err = document.querySelector("#err-msg");
-  err.addEventListener('click', () => err.style.display = "none")
-  err.textContent = msg;
-  err.style.display = "flex";
+  let err = document.querySelector("#err-msg")
+  if (err == null) {
+    err = document.createElement("div")
+    err.setAttribute("id", "err-msg")
+    document.body.appendChild(err)
+  }
+  err.addEventListener("click", () => (err.style.display = "none"))
+  err.textContent = msg
+  err.style.display = "flex"
   if (errorTimeout) {
     clearTimeout(errorTimeout)
     errorTimeout = null
   }
-  errorTimeout = setTimeout(() => (err.style.display = "none"), 5000);
+  errorTimeout = setTimeout(() => (err.style.display = "none"), 5000)
 }
