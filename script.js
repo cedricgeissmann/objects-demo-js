@@ -30,7 +30,7 @@ class Player {
 
 
 
-const p1 = new Player("Cedric", 200)
+const p1 = new Player("Spieler", 200)
 const enemy = new Player("Gegner", 50)
 
 p1.target = enemy
